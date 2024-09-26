@@ -1,34 +1,36 @@
 package se.lu.ics;
 
-import java.io.IOException;
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 
-import se.lu.ics.data.DaoException;
-import se.lu.ics.data.EmployeeDao;
-import se.lu.ics.models.Employee;
-
-public class Main {
-    public static void main(String[] args) {
+public class Main extends Application {
+    @Override
+    public void start(Stage primaryStage) {
         try {
-            EmployeeDao employeeDao = new EmployeeDao();
+            String path = "/fxml/EmployeesView.fxml";
 
-            Employee foundEmployee = employeeDao.getByNo("E8");
+            // Load root layout from fxml file (on the classpath).
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
+            AnchorPane root = loader.load();
 
-            foundEmployee.setName("Guy");
-            foundEmployee.setSalary(1000000.0);
+            // Create a scene and set it on the stage
+            Scene scene = new Scene(root);
+            primaryStage.setScene(scene);
 
-            employeeDao.update(foundEmployee);
+            // Set the stage title and show it
+            primaryStage.setTitle("Employees");
+            primaryStage.show();
 
-            Employee updatedEmployee = employeeDao.getByNo("E8");
-            System.out.println("Employee number: " + updatedEmployee.getEmployeeNumber());
-            System.out.println("Name: " + updatedEmployee.getName());
-            System.out.println("Salary: " + updatedEmployee.getSalary());
-            
-        } catch (IOException e) {
-            // TODO Error handling
-            e.printStackTrace();
-        } catch (DaoException e) {
-            // TODO Error handling
+        } catch (Exception e) {
+            // TODO: Error handling
             e.printStackTrace();
         }
+    }
+
+    public static void main(String[] args) {
+        launch(args);
     }
 }
